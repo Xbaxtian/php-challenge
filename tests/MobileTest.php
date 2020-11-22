@@ -4,8 +4,10 @@ namespace Tests;
 
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use App\Mobile;
 use App\Interfaces\CarrierInterface;
+use App\Call;
+use App\Contact;
+use App\Mobile;
 
 class MobileTest extends TestCase
 {
@@ -18,6 +20,26 @@ class MobileTest extends TestCase
 		$mobile = new Mobile($provider);
 
 		$this->assertNull($mobile->makeCallByName(''));
+	}
+
+	public function test_valid_contact()
+	{
+		$contactName = 'Sebastian';
+		$contact = new Contact($contactName);
+
+		$provider = m::mock(CarrierInterface::class);
+
+		$provider->shouldIgnoreMissing()
+			->shouldReceive('dialContact')
+			->andReturn($contact);
+
+		$provider->allows()
+			->makeCall()
+			->andReturns(new Call());
+		
+		$mobile = new Mobile($provider);
+
+		$this->assertInstanceOf(Call::class, $mobile->makeCallByName($contactName));
 	}
 
 }
