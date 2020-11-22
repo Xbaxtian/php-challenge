@@ -42,4 +42,17 @@ class MobileTest extends TestCase
 		$this->assertInstanceOf(Call::class, $mobile->makeCallByName($contactName));
 	}
 
+	public function test_invalid_contact()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		$contactName = 'Error';
+
+		$provider = m::mock(CarrierInterface::class);
+		
+		$mobile = new Mobile($provider);
+
+		$mobile->makeCallByName($contactName);
+	}
+
 }
