@@ -19,8 +19,8 @@ class ContactService
 		return new Contact($name);
 	}
 
-	public static function validateNumber(string $number): bool
+	public static function validateNumber(string $phone): bool
 	{
-		// logic to validate numbers
+		return preg_match("/^[0-9]{9}$/", $phone);
 	}
 }

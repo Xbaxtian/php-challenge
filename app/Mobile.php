@@ -32,5 +32,12 @@ class Mobile
 		return $this->provider->makeCall();
 	}
 
+	public function sendSMS($number, $body)
+	{
+		if( empty($number) || empty($body) ) return;
 
+		if ( !ContactService::validateNumber($number) ) return;
+
+		return $this->provider->sendSMS($number, $body);
+	}
 }

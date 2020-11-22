@@ -8,6 +8,7 @@ use App\Interfaces\CarrierInterface;
 use App\Call;
 use App\Contact;
 use App\Mobile;
+use App\SMS;
 
 class MobileTest extends TestCase
 {
@@ -53,6 +54,19 @@ class MobileTest extends TestCase
 		$mobile = new Mobile($provider);
 
 		$mobile->makeCallByName($contactName);
+	}
+
+	public function test_sent_sms()
+	{
+		$provider = m::mock(CarrierInterface::class);
+
+		$provider->allows()
+			->sendSMS(938937036, 'Hello world!')
+			->andReturns(new SMS());
+
+		$mobile = new Mobile($provider);
+
+		$this->assertInstanceOf(SMS::class, $mobile->sendSMS(938937036, 'Hello world!'));
 	}
 
 }
